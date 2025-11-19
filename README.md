@@ -1,97 +1,190 @@
-🤖 AI Meeting Summarizer & Chat Assistant
+# 🧠 AI Meeting Summarizer & Retrieval System
 
-A full-featured system for summarizing meeting transcripts, storing structured metadata, and enabling intelligent retrieval-based Q&A.
+A full-featured Meeting Summarization, Translation, Vector Search, and
+Conversational Retrieval system built with **Python**, **LangChain**,
+**OpenAI**, **DeepSeek**, **ChromaDB**, and **Gradio**.
 
-🚀 Overview
+This document explains the structure, purpose, and functionality of the
+source code so you can include it as your project README on GitHub.
 
-This project is a complete meeting intelligence platform built with OpenAI, DeepSeek, LangChain, ChromaDB, and Gradio.
-It allows you to:
+------------------------------------------------------------------------
 
-Generate structured meeting summaries in Markdown
+## 📌 Overview
 
-Translate summaries into multiple languages
+This project provides an interactive dashboard and chatbot interface to:
 
-Store summaries in a vector database with rich metadata
+-   Summarize meeting transcripts using GPT or DeepSeek\
+-   Translate summaries into multiple languages\
+-   Save structured meeting summaries in Markdown format\
+-   Build a vector database of meeting notes using ChromaDB\
+-   Query meeting history conversationally\
+-   Visualize embedding clusters with t-SNE\
+-   Provide a fully interactive web UI using Gradio
 
-Visualize vector embeddings (t-SNE)
+------------------------------------------------------------------------
 
-Ask questions about meetings with retrieval-augmented generation
+## 📂 Project Structure
 
-Interact via a modern Gradio UI with streaming responses
+    knowledge-base/
+       └── meetings/         # Auto‑saved meeting summaries
+    vector_db/               # Persistent Chroma vector database
+    main.py                  # Main application (your provided code)
+    .env                     # API keys for OpenAI & DeepSeek
 
-Automatically save summaries into an organized knowledge base
+------------------------------------------------------------------------
 
-✨ Key Features
-📝 Automated Meeting Summarization
+## ⚙️ Key Components
 
-Supports GPT-4o, GPT-4o-mini, and DeepSeek models
+### 1. **Environment Setup**
 
-Outputs consistent, structured Markdown:
+Loads API keys using `dotenv` and initializes both OpenAI and DeepSeek
+clients:
 
-Title
+``` python
+load_dotenv(override=True)
+openai = OpenAI()
+deepseek = OpenAI(api_key=deepseek_api_key, base_url="https://api.deepseek.com")
+```
 
-Date
+------------------------------------------------------------------------
 
-Attendees
+### 2. **Meeting Summarization**
 
-Discussion points
+The system enforces a strict output format using a custom System Prompt:
 
-Decisions made
+-   Title\
+-   Date\
+-   Human attendees\
+-   Discussion points\
+-   Decisions\
+-   Action items\
+-   Markdown‑only output
 
-Action items
+Summaries stream live using either GPT‑4o or DeepSeek.
 
-🌍 Multilingual Translation
+------------------------------------------------------------------------
 
-Translates summaries while preserving Markdown formatting
+### 3. **Saving Summaries**
 
-Supports English, Chinese, Japanese, Korean, French, German, Spanish
+Summaries are automatically saved as:
 
-📁 Intelligent Knowledge Base
+    YYYY-MM-DD_title_fragment.md
 
-Saves each summary using its meeting date
+Files are stored under:
 
-Extracts metadata:
+    knowledge-base/meetings/
 
-Date
+------------------------------------------------------------------------
 
-Attendees
+### 4. **Translation System**
 
-Discussion points
+The summarizer also supports translation into multiple languages while
+keeping the markdown structure intact.
 
-Decisions
+------------------------------------------------------------------------
 
-Action items
+### 5. **Metadata Extraction**
 
-Titles
+Each meeting summary is parsed to extract searchable metadata:
 
-Stores everything inside ChromaDB with OpenAI embeddings
+-   Date & Month\
+-   Attendees & Count\
+-   Discussion Points\
+-   Decisions\
+-   Action Items\
+-   Title
 
-🔍 Smart Meeting Q&A (RAG)
+This metadata enriches vector search relevance.
 
-Uses LangChain’s ConversationalRetrievalChain
+------------------------------------------------------------------------
 
-MMR search improves diversity & relevance
+### 6. **Vector Database (ChromaDB)**
 
-Ensures answers are strictly meeting-related
+All meeting summaries are embedded using OpenAI embeddings and stored in
+a persistent ChromaDB instance.
 
-Provides source citations
+Search uses **MMR (Maximal Marginal Relevance)** for diverse, relevant
+context retrieval.
 
-📊 Visual Dashboard
+------------------------------------------------------------------------
 
-Automatic bar chart of summaries per month
+### 7. **Visualization**
 
-t-SNE visualization of vector embeddings
+Embeddings are reduced via t‑SNE and plotted using Plotly to visualize
+clusters of meetings.
 
-All rendered inside Gradio UI
+------------------------------------------------------------------------
 
-🖥️ Modern Gradio Interface
+### 8. **Conversational Meeting Assistant**
 
-Multiple tabs (Summarize, Chat)
+A chat interface allows users to query across historical meetings:
 
-Real-time streaming updates
+-   "What were the decisions in October?"\
+-   "Show meetings involving the Marketing team."\
+-   "What are all action items assigned to Alex?"
 
-Custom theme
+All answers include source citations.
 
-Example meeting notes for quick testing
+------------------------------------------------------------------------
 
-🧠 Architecture Overview
+### 9. **Gradio UI**
+
+A polished Gradio dashboard includes:
+
+-   Meeting summary generator\
+-   Output editor\
+-   Translation module\
+-   Save function\
+-   Meeting statistics chart\
+-   Conversational retrieval chatbot
+
+The theme is customized to an **orange Soft UI**.
+
+------------------------------------------------------------------------
+
+## 🚀 Running the Application
+
+Install dependencies:
+
+``` bash
+pip install -r requirements.txt
+```
+
+Add your `.env` file:
+
+    OPENAI_API_KEY=xxxxx
+    DEEPSEEK_API_KEY=xxxxx
+
+Launch the UI:
+
+``` bash
+python main.py
+```
+
+------------------------------------------------------------------------
+
+## 🧩 Technologies Used
+
+-   **OpenAI GPT‑4o / GPT‑4o-mini**
+-   **DeepSeek Chat Model**
+-   **LangChain**
+-   **ChromaDB**
+-   **Gradio**
+-   **Plotly**
+-   **t‑SNE (scikit-learn)**
+
+------------------------------------------------------------------------
+
+## ⭐ Features Summary
+
+  Feature          Description
+  ---------------- ---------------------------------------------
+  Summarization    GPT or DeepSeek with strict business format
+  Translation      Multi-language, structure-preserving
+  Auto‑Save        Structured markdown files
+  Vector Search    MMR retrieval with metadata
+  Conversation     Chat about previous meetings
+  Visualizations   t-SNE embedding maps
+  Dashboard        Monthly meeting count chart
+
+------------------------------------------------------------------------
